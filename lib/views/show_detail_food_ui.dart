@@ -1,8 +1,9 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unused_element, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
 import 'package:flutter_food_fast_app/models/food_list.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShowDetailFoodUi extends StatefulWidget {
   FoodList? foodList; // ตัวแปรเก็บข้อมูลร้านอาหาร
@@ -16,6 +17,25 @@ class ShowDetailFoodUi extends StatefulWidget {
 }
 
 class _ShowDetailFoodUiState extends State<ShowDetailFoodUi> {
+  // ฟังก์ชันสําหรับเปิดเว็บไซต์ ในเบราว์เซอร์ เปิดแอพแผนที่
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  // ฟังก์ชันสําหรับโทรออก ไปยังหมายเลขโทรศัพท์
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +92,9 @@ class _ShowDetailFoodUiState extends State<ShowDetailFoodUi> {
                     ),
                     Divider(),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        _makePhoneCall('${widget.foodList!.phone!}');
+                      },
                       leading: Icon(
                         Icons.phone,
                         color: Colors.green,
@@ -85,7 +107,10 @@ class _ShowDetailFoodUiState extends State<ShowDetailFoodUi> {
                     ),
                     Divider(),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        _launchInBrowser(
+                            Uri.parse('${widget.foodList!.website!}'));
+                      },
                       leading: Icon(
                         Icons.web,
                         color: Colors.blue,
@@ -98,7 +123,10 @@ class _ShowDetailFoodUiState extends State<ShowDetailFoodUi> {
                     ),
                     Divider(),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        _launchInBrowser(Uri.parse(
+                            'https://www.google.com/maps/search/?api=1&query=${widget.foodList!.lat!},${widget.foodList!.lng!}'));
+                      },
                       leading: Icon(
                         FontAwesomeIcons.mapLocationDot,
                         color: Colors.orange,
