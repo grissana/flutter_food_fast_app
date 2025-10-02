@@ -124,6 +124,7 @@ class _ShowDetailFoodUiState extends State<ShowDetailFoodUi> {
                     Divider(),
                     ListTile(
                       onTap: () {
+                        //'https://www.google.com/maps/@${widget.foodList!.lat!},${widget.foodList!.lng!},16z'
                         _launchInBrowser(Uri.parse(
                             'https://www.google.com/maps/search/?api=1&query=${widget.foodList!.lat!},${widget.foodList!.lng!}'));
                       },
